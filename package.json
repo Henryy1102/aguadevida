@@ -13,5 +13,10 @@
     "start": "npm run start --workspace server",
     "lint": "npm run lint --workspace server && npm run lint --workspace client",
     "typecheck": "npm run typecheck --workspace server && npm run typecheck --workspace client"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.0.1"
   }
 }
