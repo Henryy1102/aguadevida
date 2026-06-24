@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: agua-de-vida-api
+    env: node
+    plan: free
+    region: oregon
+    buildCommand: npm install && npm run build --workspace server
+    startCommand: npm run start --workspace server
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: JWT_SECRET
+        generateValue: true
+      - key: MONGODB_URI
+        sync: false
+      - key: CLIENT_URL
+        value: https://tu-frontend-vercel-url.vercel.app
