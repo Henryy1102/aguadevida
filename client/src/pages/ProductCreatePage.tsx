@@ -104,15 +104,16 @@ export function ProductCreatePage() {
               Stock
               <input type="number" min="0" step="1" value={stock} onChange={(event) => setStock(event.target.value)} required />
             </label>
-            <label>
-              Descripción
-              <textarea rows={4} value={description} onChange={(event) => setDescription(event.target.value)} required />
-            </label>
           </div>
 
+          <label>
+            Descripción
+            <textarea rows={4} value={description} onChange={(event) => setDescription(event.target.value)} required />
+          </label>
+
           <div className="product-image-field">
-            <label>Foto del producto</label>
-            <input type="file" accept="image/*" onChange={handleImageChange} />
+            <label htmlFor="product-image-input">Imagen del producto</label>
+            <input id="product-image-input" type="file" accept="image/*" onChange={handleImageChange} />
             {imagePreview && (
               <div className="image-preview-box">
                 <img src={imagePreview} alt="Vista previa del producto" />

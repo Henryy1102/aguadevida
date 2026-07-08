@@ -10,6 +10,7 @@ type Product = {
   price: number;
   stock: number;
   stockMin: number;
+  image: string | null;
   status: string;
   lowStock: boolean;
   outOfStock: boolean;
@@ -20,7 +21,7 @@ type ProductFormState = {
   description: string;
   price: string;
   stock: string;
-  stockMin: string;
+  image: string | null;
   status: 'active' | 'inactive';
 };
 
@@ -29,7 +30,7 @@ const emptyForm: ProductFormState = {
   description: '',
   price: '',
   stock: '',
-  stockMin: '0',
+  image: null,
   status: 'active'
 };
 
@@ -74,10 +75,27 @@ export function ProductList() {
       description: product.description,
       price: String(product.price),
       stock: String(product.stock),
-      stockMin: String(product.stockMin),
+      image: product.image ?? null,
       status: product.status === 'inactive' ? 'inactive' : 'active'
     });
     setFeedback('');
+  };
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result;
+      if (typeof result === 'string') {
+        setForm((current) => ({ ...current, image: result }));
+      }
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleDelete = async (productId: string) => {
@@ -106,10 +124,9 @@ export function ProductList() {
     const normalizedDescription = form.description.trim() || 'Sin descripción';
     const price = Number(form.price);
     const stock = Number(form.stock);
-    const stockMin = Number(form.stockMin || 0);
 
-    if (!normalizedName || Number.isNaN(price) || Number.isNaN(stock) || Number.isNaN(stockMin)) {
-      setFeedback('Completa nombre, precio, stock y stock mínimo para guardar.');
+    if (!normalizedName || Number.isNaN(price) || Number.isNaN(stock)) {
+      setFeedback('Completa nombre, precio y stock para guardar.');
       return;
     }
 
@@ -121,7 +138,8 @@ export function ProductList() {
         description: normalizedDescription,
         price,
         stock,
-        stockMin,
+        stockMin: 0,
+        image: form.image,
         status: form.status
       };
 
@@ -136,7 +154,6 @@ export function ProductList() {
             ...payload,
             code: normalizedName.toLowerCase().replace(/\s+/g, '-').slice(0, 16),
             category: 'default-category',
-            image: null,
             featured: false
           },
           {
@@ -193,10 +210,6 @@ export function ProductList() {
             <input type="number" min="0" step="1" value={form.stock} onChange={(event) => setForm((current) => ({ ...current, stock: event.target.value }))} required />
           </label>
           <label>
-            Stock mínimo
-            <input type="number" min="0" step="1" value={form.stockMin} onChange={(event) => setForm((current) => ({ ...current, stockMin: event.target.value }))} required />
-          </label>
-          <label>
             Estado
             <select value={form.status} onChange={(event) => setForm((current) => ({ ...current, status: event.target.value as 'active' | 'inactive' }))}>
               <option value="active">Activo</option>
@@ -207,6 +220,16 @@ export function ProductList() {
             Descripción
             <textarea rows={3} value={form.description} onChange={(event) => setForm((current) => ({ ...current, description: event.target.value }))} required />
           </label>
+        </div>
+
+        <div className="product-image-field">
+          <label htmlFor="product-image-input">Imagen del producto</label>
+          <input id="product-image-input" type="file" accept="image/*" onChange={handleImageChange} />
+          {form.image ? (
+            <div className="image-preview-box">
+              <img src={form.image} alt="Vista previa del producto" />
+            </div>
+          ) : null}
         </div>
 
         <div className="product-form-actions">

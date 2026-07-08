@@ -88,6 +88,118 @@
 			"isBackground": false,
 			"problemMatcher": [],
 			"group": "build"
+		},
+		{
+			"label": "git-push-final",
+			"type": "shell",
+			"command": "git push origin main",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "git-status-final-clean",
+			"type": "shell",
+			"command": "git status --short",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "check-backend-4000",
+			"type": "shell",
+			"command": "powershell -NoProfile -Command \"try { $r=Invoke-WebRequest -UseBasicParsing http://localhost:4000; Write-Output ('BACKEND_STATUS=' + $r.StatusCode); Write-Output ('BACKEND_BODY=' + $r.Content) } catch { Write-Output ('BACKEND_ERR=' + $_.Exception.Message) }\"",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "check-frontend-5173",
+			"type": "shell",
+			"command": "powershell -NoProfile -Command \"try { $r=Invoke-WebRequest -UseBasicParsing http://localhost:5173; Write-Output ('FRONTEND_STATUS=' + $r.StatusCode) } catch { Write-Output ('FRONTEND_ERR=' + $_.Exception.Message) }\"",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "recheck-local-ports",
+			"type": "shell",
+			"command": "powershell -NoProfile -Command \"try { $a=Invoke-WebRequest -UseBasicParsing http://localhost:4000; 'BACKEND=' + $a.StatusCode } catch { 'BACKEND_ERR=' + $_.Exception.Message }; try { $b=Invoke-WebRequest -UseBasicParsing http://localhost:5173; 'FRONTEND=' + $b.StatusCode } catch { 'FRONTEND_ERR=' + $_.Exception.Message }\"",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "create-admin-user",
+			"type": "shell",
+			"command": "powershell -NoProfile -Command \"$body=@{ firstName='Admin'; lastName='Principal'; identification='900000001'; email='admin@aguadevida.com'; phone='3000000000'; address='Aguadevida HQ'; password='Admin12345!'; role='admin' } | ConvertTo-Json; try { $r=Invoke-RestMethod -Method Post -Uri http://localhost:4000/api/auth/register -ContentType 'application/json' -Body $body; $r | ConvertTo-Json -Depth 6 } catch { if ($_.Exception.Response -and $_.Exception.Response.GetResponseStream()) { $reader = New-Object System.IO.StreamReader($_.Exception.Response.GetResponseStream()); $reader.ReadToEnd() } else { $_.Exception.Message } }\"",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "verify-admin-login",
+			"type": "shell",
+			"command": "powershell -NoProfile -Command \"$body=@{ email='admin@aguadevida.com'; password='Admin12345!' } | ConvertTo-Json; try { $r=Invoke-RestMethod -Method Post -Uri http://localhost:4000/api/auth/login -ContentType 'application/json' -Body $body; $r | ConvertTo-Json -Depth 6 } catch { if ($_.Exception.Response -and $_.Exception.Response.GetResponseStream()) { $reader = New-Object System.IO.StreamReader($_.Exception.Response.GetResponseStream()); $reader.ReadToEnd() } else { $_.Exception.Message } }\"",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "check-render-api-url",
+			"type": "shell",
+			"command": "powershell -NoProfile -Command \"try { $r=Invoke-WebRequest -UseBasicParsing https://agua-de-vida-api.onrender.com; 'RENDER=' + $r.StatusCode; 'BODY=' + $r.Content } catch { 'RENDER_ERR=' + $_.Exception.Message }\"",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "check-render-api-health",
+			"type": "shell",
+			"command": "powershell -NoProfile -Command \"try { $r=Invoke-WebRequest -UseBasicParsing https://agua-de-vida-api.onrender.com/api/health; 'RENDER_HEALTH=' + $r.StatusCode; 'BODY=' + $r.Content } catch { if ($_.Exception.Response) { 'RENDER_HEALTH_STATUS=' + [int]$_.Exception.Response.StatusCode; $sr = New-Object System.IO.StreamReader($_.Exception.Response.GetResponseStream()); 'BODY=' + $sr.ReadToEnd() } else { 'RENDER_HEALTH_ERR=' + $_.Exception.Message } }\"",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "client-typecheck-products",
+			"type": "shell",
+			"command": "cmd /c npm run typecheck --workspace client",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "client-typecheck-after-fix",
+			"type": "shell",
+			"command": "cmd /c npm run typecheck --workspace client",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "git-status-pending",
+			"type": "shell",
+			"command": "git status --short",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "git-log-head",
+			"type": "shell",
+			"command": "git log -1 --oneline",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "git-commit-all",
+			"type": "shell",
+			"command": "git add -A & git commit -m \"Update product forms and repo settings\"",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
 		}
 	]
 }
