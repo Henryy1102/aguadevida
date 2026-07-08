@@ -56,6 +56,38 @@
 			"isBackground": false,
 			"problemMatcher": [],
 			"group": "build"
+		},
+		{
+			"label": "git-push-main",
+			"type": "shell",
+			"command": "git push origin main",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "git-status-clean",
+			"type": "shell",
+			"command": "git status --short",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "git-diff-vscode",
+			"type": "shell",
+			"command": "git diff -- .vscode/tasks.json",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "git-renormalize-vscode",
+			"type": "shell",
+			"command": "git add --renormalize .vscode/tasks.json & git commit -m \"Normalize VS Code tasks line endings\"",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
 		}
 	]
 }
